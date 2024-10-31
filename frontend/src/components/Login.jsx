@@ -1,16 +1,35 @@
 import React from 'react'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom'
+import { useLoginUserMutation } from '../redux/features/auth/authApi';
 
 const Login = () => {
   const [message, setMessage] = useState('');
   const [email, setEmail] = useState('');
   const[password, setPassword] = useState('');
+
+const dispatch = useDispatch();
+const [loginUser,{isLoading: loginLoading}] = useLoginUserMutation()
+const navigate = useNavigate()
+
+
+
+
+  //handle login
   const handleLogin = async (e) =>{
     e.preventDefault();
     const data = {
       email,
       password
+    }
+    try {
+      const response  = await loginUser(data).unwrap();
+      alert("Login succesful")
+      navigate("/")
+
+    } catch (error) {
+      setMessage("Please provide a valid email and password")
     }
     
   }
